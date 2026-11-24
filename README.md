@@ -4,7 +4,7 @@
 
 Split group expenses (hostel rent, trips, food) and **settle up with the fewest payments**. Every payment comes with a UPI link that opens GPay or PhonePe with the amount filled in. The app only builds links. It never touches money.
 
-**Live demo:** coming soon, see [Deploy](#deploy-free-tier). Until then, run it locally in a few minutes: [Run it on Windows](#run-it-on-windows-no-docker).
+**Live demo: https://hostel-splitwise-xi.vercel.app** (press "Open the demo trip"). The API runs at https://hostel-splitwise-api-igfk.onrender.com (try [`/api/stats`](https://hostel-splitwise-api-igfk.onrender.com/api/stats)). The first visit after a quiet spell can take up to a minute while the free server wakes up. To run it yourself, see [Run it on Windows](#run-it-on-windows-no-docker).
 
 <table>
   <tr>
@@ -29,7 +29,7 @@ Split group expenses (hostel rent, trips, food) and **settle up with the fewest 
   </tr>
 </table>
 
-These screenshots are from a local run of the demo trip.
+These screenshots are of the demo trip.
 
 ## The problem
 
