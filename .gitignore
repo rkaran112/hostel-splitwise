@@ -1,0 +1,15 @@
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+*.db
+
+# Node (used from Phase 3)
+node_modules/
+.next/
+
+# Secrets
+.env
+.env.*
