@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+/* Colours and fonts, named once and used everywhere.
+   paper = page background, ink = text, brand = the one blue used for actions,
+   owed / owes = green and red for money coming in and going out. */
+@theme inline {
+  --color-paper: #edf0f5;
+  --color-surface: #ffffff;
+  --color-ink: #0f1b2d;
+  --color-muted: #55657d;
+  --color-line: #d5dce7;
+  --color-brand: #2b44e6;
+  --color-brand-soft: #e4e8fd;
+  --color-owed: #12724f;
+  --color-owes: #c23b25;
+  --font-display: var(--font-display-face);
+  --font-sans: var(--font-body-face);
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body-face), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* Buttons. 48px tall so they are easy to hit with a thumb. */
+.btn {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.btn-primary {
+  background: var(--color-brand);
+  color: white;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #1f35c9;
+}
+.btn-quiet {
+  border: 1.5px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+.btn-quiet:hover:not(:disabled) {
+  border-color: var(--color-muted);
+}
+
+/* Text inputs. 16px text stops iPhones from zooming in when you tap a field. */
+.field {
+  min-height: 48px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-line);
+  background: var(--color-surface);
+  padding: 0 0.875rem;
+  font-size: 16px;
+}
+.field::placeholder {
+  color: #8a97ab;
+}
+
+/* The payment "ticket": a white card with two half-circle notches cut out at the
+   dashed line, like a torn ticket. The notches are page-coloured circles. */
+.ticket-tear {
+  position: relative;
+  height: 0;
+  border-top: 2px dashed var(--color-line);
+}
+.ticket-tear::before,
+.ticket-tear::after {
+  content: "";
+  position: absolute;
+  top: -11px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-paper);
+}
+.ticket-tear::before {
+  left: -11px;
+}
+.ticket-tear::after {
+  right: -11px;
+}
+
+/* The before/after picture fades between its two sets of arrows. */
+.fade-layer {
+  transition: opacity 0.5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-layer {
+    transition: none;
+  }
+}
