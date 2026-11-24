@@ -218,3 +218,7 @@ def test_usage_counter_ignores_demo_groups(client):
     add_equal_expense(client, group, "Asha", "90", ["Asha", "Ben"])
     add_equal_expense(client, group, "Ben", "60", ["Asha", "Ben"])
     assert client.get("/api/stats").json() == {"groups": 1, "expenses": 2, "demo_groups": 1}
+
+
+def test_health_check(client):
+    assert client.get("/api/health").json() == {"status": "ok"}

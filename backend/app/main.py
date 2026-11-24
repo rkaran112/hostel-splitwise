@@ -58,6 +58,14 @@ def check_unique_names(names):
         seen.add(key)
 
 
+# ---------- health check ----------
+
+@app.get("/api/health")
+def health():
+    """Render calls this to know the server is up. It does not touch the database."""
+    return {"status": "ok"}
+
+
 # ---------- groups ----------
 
 @app.post("/api/groups")

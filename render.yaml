@@ -1,0 +1,20 @@
+# Render "Blueprint": describes the API service so it can be created in a few clicks.
+# Dashboard -> New -> Blueprint -> pick this repository.
+services:
+  - type: web
+    name: hostel-splitwise-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.2
+      # Supabase "Session pooler" connection string (paste it in the Render dashboard).
+      - key: DATABASE_URL
+        sync: false
+      # The Vercel website address, for example https://hostel-splitwise.vercel.app
+      - key: ALLOWED_ORIGINS
+        sync: false

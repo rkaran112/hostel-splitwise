@@ -1,0 +1,26 @@
+# Supabase's free plan pauses a project after about a week with no activity,
+# and Render's free API sleeps after 15 quiet minutes. This calls the API twice a week,
+# which wakes Render and makes it query the database, so neither one goes to sleep for long.
+#
+# Setup: GitHub repo -> Settings -> Secrets and variables -> Actions -> Variables ->
+# add API_URL, for example https://hostel-splitwise-api.onrender.com
+name: Keep alive
+
+on:
+  schedule:
+    - cron: "0 6 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the API
+        env:
+          API_URL: ${{ vars.API_URL }}
+        run: |
+          if [ -z "$API_URL" ]; then
+            echo "API_URL is not set yet. Nothing to ping."
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 120 --retry 3 --retry-delay 20 "$API_URL/api/stats"
