@@ -10,7 +10,7 @@ import secrets
 from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
-from app.balances import count_pairwise_debts, net_balances
+from app.balances import net_balances, pairwise_debts
 from app.models import Expense, ExpenseShare, Group, Member
 from app.money import check_exact_split, rupees_to_paise, split_equally
 from app.schemas import MemberIn
@@ -131,11 +131,22 @@ def settle_to_dict(group, expenses):
     payments = [payment_to_dict(payment, members) for payment in result["payments"]]
     steps = [step_to_dict(step, members) for step in result["steps"]]
 
+    debts = [debt_to_dict(debt, members) for debt in pairwise_debts(math_expenses)]
+
     return {
-        "before_debts": count_pairwise_debts(math_expenses),
+        "before_debts": len(debts),
         "after_payments": len(payments),
+        "debts": debts,
         "payments": payments,
         "steps": steps,
+    }
+
+
+def debt_to_dict(debt, members):
+    return {
+        "from_name": members[debt["from"]].name,
+        "to_name": members[debt["to"]].name,
+        "amount": debt["amount"],
     }
 
 

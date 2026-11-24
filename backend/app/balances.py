@@ -41,13 +41,14 @@ def _ordered_pair(person_a, person_b):
     return person_b, person_a
 
 
-def count_pairwise_debts(expenses):
-    """The 'BEFORE' number: how many separate debts exist without simplifying?
+def pairwise_debts(expenses):
+    """The 'BEFORE' picture: one debt per pair of people who still owe each other.
 
     For every expense, each person who has a share owes the payer that share.
     If Ben owes Asha 700 from one trip and Asha owes Ben 300 from another, those
-    cancel into ONE debt of 400. We net every pair of people this way, then count
-    the pairs that still owe something.
+    cancel into ONE debt of 400 (Ben -> Asha). We net every pair of people this way.
+
+    Returns [{"from": debtor, "to": creditor, "amount": paise}, ...]
     """
     # For each pair (first, second): positive means `second` owes `first`.
     pair_totals = {}
@@ -64,8 +65,15 @@ def count_pairwise_debts(expenses):
             else:
                 pair_totals[(first, second)] = pair_totals.get((first, second), 0) - share
 
-    debts = 0
-    for total in pair_totals.values():
-        if total != 0:
-            debts += 1
+    debts = []
+    for (first, second), total in pair_totals.items():
+        if total > 0:
+            debts.append({"from": second, "to": first, "amount": total})
+        elif total < 0:
+            debts.append({"from": first, "to": second, "amount": -total})
     return debts
+
+
+def count_pairwise_debts(expenses):
+    """How many separate debts exist without simplifying (the 'before' number)."""
+    return len(pairwise_debts(expenses))

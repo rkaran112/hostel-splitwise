@@ -205,6 +205,8 @@ def test_demo_group_matches_the_readme_example(client):
     result = client.get(f"/api/groups/{demo['id']}/settle").json()
     assert result["before_debts"] == 9
     assert result["after_payments"] == 4
+    assert len(result["debts"]) == 9
+    assert {"from_name": "Ben", "to_name": "Asha", "amount": 120000} in result["debts"]
     assert all(p["upi_link"].startswith("upi://pay?") for p in result["payments"])
 
 

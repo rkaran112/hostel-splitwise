@@ -28,13 +28,14 @@ async def lifespan(app):
 app = FastAPI(title="Hostel Splitwise", lifespan=lifespan)
 
 # CORS: the browser only lets the website call this API if the API says the website is allowed.
-allowed_origins = os.environ.get("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[origin.strip() for origin in allowed_origins],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Live: ALLOWED_ORIGINS is set to the website's address. Laptop: not set, so any localhost port works.
+allowed_origins = os.environ.get("ALLOWED_ORIGINS")
+if allowed_origins is None:
+    cors_settings = {"allow_origin_regex": r"http://localhost:\d+"}
+else:
+    cors_settings = {"allow_origins": [origin.strip() for origin in allowed_origins.split(",")]}
+
+app.add_middleware(CORSMiddleware, allow_methods=["*"], allow_headers=["*"], **cors_settings)
 
 
 def get_group_or_404(db, group_id):

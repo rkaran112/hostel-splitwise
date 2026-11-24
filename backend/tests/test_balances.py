@@ -1,4 +1,4 @@
-from app.balances import count_pairwise_debts, net_balances
+from app.balances import count_pairwise_debts, net_balances, pairwise_debts
 
 
 def make_expense(paid_by, amount, shares):
@@ -68,3 +68,15 @@ def test_everyone_paid_once_for_everyone_gives_a_full_mesh():
         expenses.append(make_expense(payer, amount, shares))
     # Different amounts -> every pair has a leftover debt: 4 people -> 6 pairs.
     assert count_pairwise_debts(expenses) == 6
+
+
+def test_pairwise_debts_say_who_owes_whom_and_how_much():
+    first = make_expense("a", 1000, {"a": 500, "b": 500})  # b owes a 500
+    second = make_expense("b", 300, {"a": 150, "b": 150})  # a owes b 150
+    assert pairwise_debts([first, second]) == [{"from": "b", "to": "a", "amount": 350}]
+
+
+def test_pairwise_debts_flip_direction_when_the_other_person_owes_more():
+    first = make_expense("a", 200, {"a": 100, "b": 100})  # b owes a 100
+    second = make_expense("b", 1000, {"a": 500, "b": 500})  # a owes b 500
+    assert pairwise_debts([first, second]) == [{"from": "a", "to": "b", "amount": 400}]
